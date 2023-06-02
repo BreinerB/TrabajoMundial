@@ -234,9 +234,11 @@ public int[] Partidos_Gan_Emp() {
         int partidos_Emp = 0;
         int partidosGanados = 0;
         try {
-            ResultSet result = BasedeDatos.ejecutarSQL("SELECT SUM(CASE WHEN goles_local > goles_visitante THEN 1 ELSE 0 END) + "
-                    + "SUM(CASE WHEN goles_local < goles_visitante THEN 1 ELSE 0 END) AS partidos_con_ganador, SUM(CASE WHEN goles_local "
-                    + "= goles_visitante THEN 1 ELSE 0 END) AS partidos_con_empate FROM b_bautita4.partidos");
+            ResultSet result = BasedeDatos.ejecutarSQL("SELECT\n" +
+"    SUM(CASE WHEN goles_local > goles_visitante OR goles_local < goles_visitante THEN 1 ELSE 0 END) AS partidos_con_ganador,\n" +
+"    SUM(CASE WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS partidos_con_empate\n" +
+"FROM\n" +
+"    b_bautista4.partidos;");
             if (result.next()) {
                 partidosGanados = result.getInt("partidos_con_ganador");
                 partidos_Emp = result.getInt("partidos_con_empate");
@@ -246,9 +248,144 @@ public int[] Partidos_Gan_Emp() {
         }
         return new int[]{partidosGanados, partidos_Emp};
     }
+ public DefaultTableModel seleccion_mas_y_menosgoles() {
+         String[] columnas = {"Seleccion", "Goles"};
+    Object[][] matrizResultados = new Object[2][columnas.length];
+    try {
+        ResultSet result = BasedeDatos.ejecutarSQL("SELECT local AS seleccion, SUM(goles_local) AS total_goles\n" +
+            "FROM b_bautista4.partidos\n" +
+            "GROUP BY local\n" +
+            "ORDER BY total_goles DESC\n" +
+            "LIMIT 1;");
+        ResultSet result2 = BasedeDatos.ejecutarSQL("SELECT local AS seleccion, SUM(goles_local) AS total_goles\n" +
+            "FROM b_bautista4.partidos\n" +
+            "GROUP BY local\n" +
+            "ORDER BY total_goles ASC\n" +
+            "LIMIT 1;");
 
- 
+        if (result.next()) {
+            String seleccionMasGoles = result.getString("seleccion");
+            int golesMas = result.getInt("total_goles");
+            Object[] filaMas = {seleccionMasGoles, golesMas};
+            matrizResultados[0] = filaMas;
+        }
 
+        if (result2.next()) {
+            String seleccionMenosGoles = result2.getString("seleccion");
+            int golesMenos = result2.getInt("total_goles");
+            Object[] filaMenos = {seleccionMenosGoles, golesMenos};
+            matrizResultados[1] = filaMenos;
+        }
+
+    } catch (Exception e) {
+        // Manejar la excepción cerrando la conexión a la base de datos
+    }
+    DefaultTableModel modeloTabla = new DefaultTableModel(matrizResultados, columnas);
+    return modeloTabla;
+}
+ public DefaultTableModel continente_mas_y_menosgoles() {
+         String[] columnas = {"Continente", "Goles"};
+    Object[][] matrizResultados = new Object[2][columnas.length];
+    try {
+        ResultSet result = BasedeDatos.ejecutarSQL("SELECT continente_local AS continente, SUM(goles_local) AS total_goles\n" +
+        "FROM b_bautista4.partidos\n" +
+        "GROUP BY continente_local\n" +
+        "ORDER BY total_goles DESC\n" +
+        "LIMIT 1;");
+        ResultSet result2 = BasedeDatos.ejecutarSQL("SELECT continente_local AS continente, SUM(goles_local) AS total_goles\n" +
+        "FROM b_bautista4.partidos\n" +
+        "GROUP BY continente_local\n" +
+        "ORDER BY total_goles ASC\n" +
+        "LIMIT 1;");
+
+        if (result.next()) {
+            String continenteMasGoles = result.getString("continente");
+            int golesMas = result.getInt("total_goles");
+            Object[] filaMas = {continenteMasGoles, golesMas};
+            matrizResultados[0] = filaMas;
+        }
+
+        if (result2.next()) {
+            String continenteMenosGoles = result2.getString("continente");
+            int golesMenos = result2.getInt("total_goles");
+            Object[] filaMenos = {continenteMenosGoles, golesMenos};
+            matrizResultados[1] = filaMenos;
+        }
+
+    } catch (Exception e) {
+        // Manejar la excepción cerrando la conexión a la base de datos
+    }
+    DefaultTableModel modeloTabla = new DefaultTableModel(matrizResultados, columnas);
+    return modeloTabla;
+}
+  public DefaultTableModel seleccion_mas_y_menospuntos() {
+
+   String[] columnas = {"Seleccion", "Puntos"};
+Object[][] matrizResultados = new Object[2][columnas.length];
+try {
+    ResultSet result = BasedeDatos.ejecutarSQL("SELECT local AS seleccion, SUM(goles_local) * 3 AS puntos\n" +
+            "FROM b_bautista4.partidos\n" +
+            "GROUP BY local\n" +
+            "ORDER BY puntos DESC\n" +
+            "LIMIT 1;");
+    ResultSet result2 = BasedeDatos.ejecutarSQL("SELECT local AS seleccion, SUM(goles_local) * 3 AS puntos\n" +
+            "FROM b_bautista4.partidos\n" +
+            "GROUP BY local\n" +
+            "ORDER BY puntos ASC\n" +
+            "LIMIT 1;");
+
+    if (result.next()) {
+        String seleccionMasPuntos = result.getString("seleccion");
+        int puntosMas = result.getInt("puntos"); 
+        Object[] filaMas = {seleccionMasPuntos, puntosMas};
+        matrizResultados[0] = filaMas;
+    }
+
+    if (result2.next()) {
+        String seleccionMenosPuntos = result2.getString("seleccion");
+        int puntosMenos = result2.getInt("puntos");  
+        Object[] filaMenos = {seleccionMenosPuntos, puntosMenos};
+        matrizResultados[1] = filaMenos;
+    }
+
+} catch (Exception e) {
+    // Manejar la excepción cerrando la conexión a la base de datos
+}
+
+DefaultTableModel modeloTabla = new DefaultTableModel(matrizResultados, columnas);
+return modeloTabla;
+  }
+
+public DefaultTableModel Clasificados() {
+            String[] columnas = {"Grupo", "Seleccion"};
+    ArrayList<Object[]> filas = new ArrayList<>();
+    try {
+        ResultSet result = BasedeDatos.ejecutarSQL("SELECT grupo, local AS seleccion\n" +
+            "FROM (\n" +
+            "    SELECT grupo, local, ROW_NUMBER() OVER (PARTITION BY grupo ORDER BY goles_local DESC) AS posicion\n" +
+            "    FROM b_bautista4.partidos\n" +
+            ") subquery\n" +
+            "WHERE posicion <= 2\n" +
+            "ORDER BY grupo, posicion;");
+        
+        while (result.next()) {
+            String grupo = result.getString("grupo");
+            String seleccion = result.getString("seleccion");
+            Object[] fila = {grupo, seleccion};
+            filas.add(fila);
+        }
+    } catch (Exception e) {
+        // Manejar la excepción cerrando la conexión a la base de datos
+    }
+    
+    Object[][] matrizResultados = new Object[filas.size()][columnas.length];
+    for (int i = 0; i < filas.size(); i++) {
+        matrizResultados[i] = filas.get(i);
+    }
+    
+    DefaultTableModel modeloTabla = new DefaultTableModel(matrizResultados, columnas);
+    return modeloTabla;
+}
     public DefaultTableModel seleccionesContinente() {
         String[] columnas = {"Continente", "Cantidad"};
         Object[][] matrizResultados = new Object[0][columnas.length];

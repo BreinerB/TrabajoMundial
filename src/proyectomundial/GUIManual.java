@@ -194,6 +194,8 @@ public class GUIManual extends JFrame {
             }
         });
     }
+    
+
 
     /**
      * Función que se ejecuta cuando el usuario hacer click sobre la opción de
@@ -495,7 +497,7 @@ public class GUIManual extends JFrame {
                 + "3. Cantidad de nacionalidades diferentes de los directores técnicos \n"
                 + "4. Ranking de nacionalidades de directores técnicos \n\n"
                 + "Utilice los diferentes componentes gráficos para construir un dashboard lo más estético posible");*/
-       //// punto 1
+    //// punto 1
         
         JPanel cantidad_selecciones = new JPanel();
         JLabel texto_selecciones = new JLabel();
@@ -638,46 +640,115 @@ public class GUIManual extends JFrame {
         promedio.setBackground(Color.cyan);  
 ///punto 3
 
-         JPanel punto3 = new JPanel();
-                JTable tablaPunto3=new JTable();
-                 JLabel textP3 = new JLabel();
-                textP3.setText("Partido Con Mas Y Menos Goles");
-                tablaPunto3.setModel(seleccionDAO.getPartido_menos_y_mas_goles());
-        punto3.add(textP3);
-        punto3.add(tablaPunto3);
-        punto3.setPreferredSize(new Dimension(200, 50));
-        punto3.setBackground(Color.cyan);
+//         JPanel punto3 = new JPanel();
+//                JTable tablaPunto3=new JTable();
+//                 JLabel textP3 = new JLabel();
+//                textP3.setText("Partido Con Mas Y Menos Goles");
+//                tablaPunto3.setModel(seleccionDAO.getPartido_menos_y_mas_goles());
+//        punto3.add(textP3);
+//        punto3.add(tablaPunto3);
+//        punto3.setPreferredSize(new Dimension(200, 50));
+//        punto3.setBackground(Color.CYAN);
+JPanel partidoMasMenosGolesPanel = new JPanel();
+partidoMasMenosGolesPanel.setBackground(Color.CYAN);
+partidoMasMenosGolesPanel.setPreferredSize(new Dimension(300, 100));
+partidoMasMenosGolesPanel.setLayout(new BorderLayout());
 
+JLabel partidoMasMenosGolesLabel = new JLabel("Partido con más y menos goles:");
+partidoMasMenosGolesPanel.add(partidoMasMenosGolesLabel, BorderLayout.PAGE_START);
+
+JTable partidoMasMenosGolesTable = new JTable(seleccionDAO.getPartido_menos_y_mas_goles());
+JScrollPane scrollPane = new JScrollPane(partidoMasMenosGolesTable);
+scrollPane.setPreferredSize(new Dimension(350, 150)); // Establece las dimensiones deseadas para el JScrollPane
+scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // Muestra siempre la barra de desplazamiento horizontal si es necesario
+scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Muestra siempre la barra de desplazamiento vertical si es necesario
+
+partidoMasMenosGolesPanel.add(scrollPane, BorderLayout.CENTER);
 //punto4
 
 JPanel panel3 = new JPanel();
         JLabel label3 = new JLabel("Partidos ganados: 0, Partidos empatados: 0");
-        panel3.setBackground(Color.gray);
+        panel3.setBackground(Color.CYAN);
         panel3.setPreferredSize(new Dimension(340, 40));
         label3.setHorizontalAlignment(JLabel.CENTER);
-        label3.setFont(new Font("Verdana", Font.BOLD, 13));
-        label3.setForeground(Color.CYAN);
+        label3.setFont(new Font("Arial", Font.BOLD, 13));
+        label3.setForeground(Color.BLACK);
         int[] resultados = seleccionDAO.Partidos_Gan_Emp();
         int partidosGanados = resultados[0];
         int partidosEmpatados = resultados[1];
         label3.setText("Partidos ganados: " + partidosGanados + ", Partidos empatados: " + partidosEmpatados);
         panel3.add(label3);
+//punto5
+
+JPanel punto5 = new JPanel();
+                JTable tablaPunto5=new JTable();
+                 JLabel textP5 = new JLabel();
+                textP5.setText("Selecciones con mas y menos goles");
+                tablaPunto5.setModel(seleccionDAO.seleccion_mas_y_menosgoles());
+        punto5.add(textP5);
+        punto5.add(tablaPunto5);
+        punto5.setPreferredSize(new Dimension(270, 70));
+        punto5.setBackground(Color.CYAN);
+
+//punto 6
+
+JPanel punto6 = new JPanel();
+                JTable tablaPunto6=new JTable();
+                 JLabel textP6 = new JLabel();
+                textP6.setText("Selecciones con mas y menos puntos");
+                tablaPunto6.setModel(seleccionDAO.seleccion_mas_y_menospuntos());
+        punto6.add(textP6);
+        punto6.add(tablaPunto6);
+        punto6.setPreferredSize(new Dimension(270, 70));
+        punto6.setBackground(Color.CYAN);
         
+//punto 7
+
+JPanel punto7 = new JPanel();
+                JTable tablaPunto7=new JTable();
+                 JLabel textP7 = new JLabel();
+                textP7.setText("Selecciones con mas y menos puntos");
+                tablaPunto7.setModel(seleccionDAO.continente_mas_y_menosgoles());
+        punto7.add(textP7);
+        punto7.add(tablaPunto7);
+        punto7.setPreferredSize(new Dimension(270, 70));
+        punto7.setBackground(Color.CYAN);
+        
+//punto 8
+
+JPanel punto8 = new JPanel();
+                JTable tablaPunto8=new JTable();
+                 JLabel textP8 = new JLabel();
+                textP8.setText("Selecciones Clasificadas Por Grupo");
+                tablaPunto8.setModel(seleccionDAO.Clasificados());
+        punto8.add(textP8);
+        punto8.add(tablaPunto8);
+        punto8.setPreferredSize(new Dimension(300, 300));
+        punto8.setBackground(Color.cyan);
+
+
         jPanelMain.removeAll();
         jPanelMain.add(cantidad_partidos);
         jPanelMain.add(promedio);
-        jPanelMain.add(punto3);
+        jPanelMain.add(partidoMasMenosGolesPanel);
         jPanelMain.add(panel3);
+        jPanelMain.add(punto5);
+        jPanelMain.add(punto6);
+        jPanelMain.add(punto7);
+        jPanelMain.add(punto8);
 //        jPanelMain.add(a);
         jPanelMain.repaint();
         jPanelMain.revalidate();
     }
 
     /**
-     * Función que permite darle estilos y agregar los componentes gráficos del
-     * contendor de la parte izquierda de la interfaz, dónde se visulaiza el
-     * menú de navegaación
+     * Función que se encarga de ajustar los elementos gráficos que componente
+     * la opción de navegación de Dashboard de Resultados Define estilos,
+     * etiquetas, iconos que decoran la opción del Menú. Esta opción de Menu
+     * permite mostrar los diferentes datos que será extraidos de la información
+     * de los resultados de los partidos que fueron cargados
      */
+    
     private void pintarPanelIzquierdo() {
         // Se elimina el color de fondo del panel del menú
         jPanelMenu.setOpaque(false);
@@ -900,40 +971,35 @@ JPanel panel3 = new JPanel();
      * manera dinámica el contenido de cada una de las funciones que puede
      * realizar el usuario sobre la aplicación.
      */
-    private void pintarPanelDerecho() {
+ private void pintarPanelDerecho() {
+    // Define las dimensiones del panel
+    jPanelMain.setPreferredSize(new java.awt.Dimension(800, 700));
 
-        // Define las dimensiones del panel
-        jPanelMain.setPreferredSize((new java.awt.Dimension(1000, 1000)));
-        jPanelMain.setMaximumSize(jPanelLabelTop.getPreferredSize());
-
-        getContentPane().add(jPanelRight, java.awt.BorderLayout.CENTER);
-        jPanelRight.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        jPanelRight.add(jPanelLabelTop, BorderLayout.LINE_START);
-        jPanelRight.add(jPanelMain);
-        jPanelRight.setPreferredSize((new java.awt.Dimension(820, 640)));
-        jPanelRight.setMaximumSize(jPanelRight.getPreferredSize());
-    }
+    getContentPane().add(jPanelRight, java.awt.BorderLayout.CENTER);
+    jPanelRight.setLayout(new BorderLayout());
+    jPanelRight.add(jPanelLabelTop, BorderLayout.PAGE_START);
+    jPanelRight.add(new JScrollPane(jPanelMain), BorderLayout.CENTER);
+    jPanelRight.setPreferredSize(new java.awt.Dimension(800, 700));
+}
 
     /**
      * Función que permite pinta la barra azul del contenedor de contenidos.
      * Barra azul que permite indicar en que sección que se encuentra navegando
      * el usuario.
      */
-    private void pintarLabelTop() {
-        jLabelTop = new JLabel();
-        jLabelTop.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
-        jLabelTop.setForeground(new java.awt.Color(241, 241, 241));
-        jLabelTop.setText("Home");
+private void pintarLabelTop() {
+    jLabelTop = new JLabel("Home");
+    jLabelTop.setFont(new Font("Liberation Sans", Font.BOLD, 36));
+    jLabelTop.setForeground(Color.WHITE);
 
-        JLabel vacioTopLabel = new JLabel();
-        jPanelLabelTop.setLayout(new BorderLayout(15, 0));
-        jPanelLabelTop.add(vacioTopLabel, BorderLayout.WEST);
-        jPanelLabelTop.setBackground(new java.awt.Color(18, 119, 217));
-        jPanelLabelTop.add(jLabelTop, BorderLayout.CENTER);
-        jPanelLabelTop.setPreferredSize((new java.awt.Dimension(620, 120)));
-        jPanelLabelTop.setMaximumSize(jPanelLabelTop.getPreferredSize());
-    }
+    jPanelLabelTop.setLayout(new BorderLayout(15, 0));
+    jPanelLabelTop.setBackground(new Color(18, 119, 217));
+    jPanelLabelTop.setPreferredSize(new Dimension(620, 120));
 
+    JLabel vacioTopLabel = new JLabel();
+    jPanelLabelTop.add(vacioTopLabel, BorderLayout.WEST);
+    jPanelLabelTop.add(jLabelTop, BorderLayout.CENTER);
+}
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
